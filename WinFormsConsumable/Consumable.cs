@@ -1,40 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WinFormsConsumable
 {
-    public class Consumable
+    public class ConsumableValidator
     {
-        public long Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
-        public int CycleDays { get; set; }
-        public DateTime LastReplaceDate { get; set; }
-        public DateTime NextDueDate { get; set; }
-        public int ReminderDaysBefore { get; set; } = 7;
-
-        public void UpdateLastReplacedDate(DateTime newDate)
+        public bool CheckConsumableData(string name, string cycleValue, string periodType)
         {
-            if (newDate == default)
-                throw new ArgumentException("Дата замены не может быть пустой");
+            // 1. Проверка на пустоту имени
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Название расходника не может быть пустым");
+            }
 
-            LastReplaceDate = newDate;
-            CalculateNextDueDate();
-        }
+            // 2. Проверка, что цикл является числом
+            if (!int.TryParse(cycleValue, out int parsedCycle))
+            {
+                throw new FormatException("Значение цикла должно быть числом");
+            }
 
-        public void CalculateNextDueDate()
-        {
-            if (CycleDays <= 0)
-                throw new InvalidOperationException("Цикл замены должен быть положительным числом");
+            // 3. Проверка на положительное значение числового цикла
+            if (parsedCycle <= 0)
+            {
+                throw new ArgumentOutOfRangeException("cycleValue", "Цикл замены должен быть больше нуля");
+            }
 
-            NextDueDate = LastReplaceDate.AddDays(CycleDays);
-        }
+            // 4. Проверка периода
+            if (string.IsNullOrWhiteSpace(periodType))
+            {
+                throw new ArgumentException("Не выбран тип периода");
+            }
 
-        public bool IsDueSoon()
-        {
-            return DateTime.Today.AddDays(ReminderDaysBefore) >= NextDueDate;
+            return true;
         }
     }
 }
-
