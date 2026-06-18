@@ -39,9 +39,11 @@ namespace WinFormsConsumable.Tests
             string period = "нед.";
 
             // Act & Assert
+            // Сначала проверяем тип исключения и сохраняем его в переменную ex
             var ex = Assert.Throws<ArgumentException>(() =>
                 _validator.CheckConsumableData(name, cycle, period));
 
+            // Затем отдельно проверяем, что внутри исключения содержится правильный текст
             Assert.That(ex.Message, Does.Contain("Название расходника не может быть пустым"));
         }
 
