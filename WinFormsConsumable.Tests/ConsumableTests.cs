@@ -61,5 +61,17 @@ namespace WinFormsConsumable.Tests
 
             Assert.That(ex.Message, Does.Contain("Значение цикла должно быть числом"));
         }
-    }
-}
+        [Test]
+	        public void CheckConsumableData_NegativeCycle_ThrowsArgumentOutOfRangeException()
+	        {
+	            string name = "Фильтр для воды";
+	            string cycle = "-5";
+	            string period = "мес.";
+	
+	            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                _validator.CheckConsumableData(name, cycle, "мес."));
+	            
+	            Assert.That(ex.Message, Does.Contain("Цикл замены должен быть больше нуля"));
+	        }
+	    }
+	}
