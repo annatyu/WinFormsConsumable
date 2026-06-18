@@ -3,7 +3,20 @@ using System;
 using WinFormsConsumable; // Пространство имен вашего основного проекта
 
 namespace WinFormsConsumable.Tests
+{ 
+    public class StubConsumableRepository : IConsumableRepository
 {
+    public bool IsNameExists(string name)
+    {
+        // Имитируем, что в базе данных уже сохранен расходник "Зубная щетка"
+        if (name == "Зубная щетка")
+        {
+            return true;
+        }
+        return false;
+    }
+}
+
     [TestFixture]
     public class ConsumableTests
     {
