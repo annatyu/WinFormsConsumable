@@ -3,29 +3,32 @@ using System;
 using WinFormsConsumable; // Пространство имен вашего основного проекта
 
 namespace WinFormsConsumable.Tests
-{ 
-    public class StubConsumableRepository : IConsumableRepository
 {
-    public bool IsNameExists(string name)
+    public class StubConsumableRepository : IConsumableRepository
     {
-        // Имитируем, что в базе данных уже сохранен расходник "Зубная щетка"
-        if (name == "Зубная щетка")
+        public bool IsNameExists(string name)
         {
-            return true;
+            // Имитируем, что в базе данных уже сохранен расходник "Зубная щетка"
+            if (name == "Зубная щетка")
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
     }
-}
 
     [TestFixture]
     public class ConsumableTests
     {
         private ConsumableValidator _validator;
+        private StubConsumableRepository _stubRepository;
 
         [SetUp]
         public void Setup()
         {
-            _validator = new ConsumableValidator();
+            // Инициализируем двойник и передаем его в тестируемый класс
+            _stubRepository = new StubConsumableRepository();
+            _validator = new ConsumableValidator(_stubRepository);
         }
 
         [Test]
@@ -75,16 +78,32 @@ namespace WinFormsConsumable.Tests
             Assert.That(ex.Message, Does.Contain("Значение цикла должно быть числом"));
         }
         [Test]
-	        public void CheckConsumableData_NegativeCycle_ThrowsArgumentOutOfRangeException()
-	        {
-	            string name = "Фильтр для воды";
-	            string cycle = "-5";
-	            string period = "мес.";
-	
-	            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _validator.CheckConsumableData(name, cycle, "мес."));
-	            
-	            Assert.That(ex.Message, Does.Contain("Цикл замены должен быть больше нуля"));
-	        }
-	    }
-	}
+        public void CheckConsumableData_NegativeCycle_ThrowsArgumentOutOfRangeException()
+        {
+            string name = "Фильтр для воды";
+            string cycle = "-5";
+            string period = "мес.";
+
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            _validator.CheckConsumableData(name, cycle, "мес."));
+
+            Assert.That(ex.Message, Does.Contain("Цикл замены должен быть больше нуля"));
+        }
+        // ТЕСТ 5: Использование тестового двойника — Повторяющееся имя расходника
+        [Test]
+        public void CheckConsumableData_DuplicateName_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            // Используем имя, которое наш Stub гарантированно считает "существующим в БД"
+            string name = "Зубная щетка";
+            string cycle = "3";
+            string period = "мес.";
+
+            // Act & Assert
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+            _validator.CheckConsumableData(name, cycle, period));
+
+            Assert.That(ex.Message, Does.Contain("Расходник с таким названием уже существует"));
+        }
+    }
+}
