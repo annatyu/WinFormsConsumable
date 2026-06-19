@@ -16,11 +16,25 @@ namespace WinFormsConsumable
         {
             // Вызываем ваш метод проверки из ЛР №3
             ConsumableValidator validator = new ConsumableValidator();
+            // Передаем текст из полей формы в ваш валидатор из ЛР №3
+            string name = txtNameField.Text;
+            string cycle = txtCycleValueField.Text;
+            string period = cbPeriodTypeField.Text; // Будет "мес." или "нед."
 
-            if (validator.CheckConsumableData(txtNameField.Text, txtCycleValueField.Text, cbPeriodTypeField.Text))
+            try
             {
-                // Если данные валидны, добавляем строку в список
-                listBoxItems.Items.Add($"{txtNameField.Text} — {txtCycleValueField.Text} {cbPeriodTypeField.Text}");
+                // Проверяем данные. Если метод возвращает bool:
+                if (validator.CheckConsumableData(name, cycle, period))
+                {
+                    // Формируем точно такую же строку, какую ищет ваш тест!
+                    listBoxItems.Items.Add($"{name} — {cycle} {period}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Если внутри валидатора вылетает исключение (как вы писали в ЛР3), 
+                // выводим его, чтобы не блокировать интерфейс
+                MessageBox.Show(ex.Message);
             }
         }
 

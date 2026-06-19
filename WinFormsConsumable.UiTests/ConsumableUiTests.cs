@@ -48,11 +48,12 @@ namespace WinFormsConsumable.UiTests
             // 2. Имитируем ввод данных реальным пользователем
             txtName.Text = "Зубная щетка";
             txtCycle.Text = "3";
-            cbPeriod.Select("мес."); // Выбираем первый элемент в выпадающем списке (например, "мес.")
-
+            //cbPeriod.Select("мес."); // Выбираем первый элемент в выпадающем списке (например, "мес.")
+            // Принудительно вписываем текст в ComboBox, имитируя выбор пользователя
+            cbPeriod.EditableText = "мес.";
             // 3. Робот нажимает на кнопку "Добавить"
             btnSave.Click();
-
+            System.Threading.Thread.Sleep(300);
             // 4. Проверяем результат (системное ожидание)
             // Ищем, появился ли в ListBox добавленный элемент
             Assert.That(listBox.Items, Has.Length.GreaterThan(0), "Список расходников пуст!");
