@@ -71,6 +71,7 @@
             // 
             cbPeriodTypeField.AccessibleName = "cbPeriodTypeField";
             cbPeriodTypeField.FormattingEnabled = true;
+            cbPeriodTypeField.Items.AddRange(new object[] { "мес.", "нед.", "день" });
             cbPeriodTypeField.Location = new Point(230, 253);
             cbPeriodTypeField.Name = "cbPeriodTypeField";
             cbPeriodTypeField.Size = new Size(181, 28);

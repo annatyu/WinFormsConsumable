@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="WinFormsConsumable.Tests/WinFormsConsumable.Tests.csproj" Id="14d12f67-9a39-44b5-af4e-c7c4665ba853" />
+  <Project Path="WinFormsConsumable.UiTests/WinFormsConsumable.UiTests.csproj" Id="99348fb8-98a0-4036-b5c8-c36f37a62bd2" />
   <Project Path="WinFormsConsumable/WinFormsConsumable.csproj" />
 </Solution>
