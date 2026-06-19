@@ -33,13 +33,17 @@
             txtCycleValueField = new TextBox();
             cbPeriodTypeField = new ComboBox();
             btnSaveConsumable = new Button();
+            labelList = new Label();
+            labelName = new Label();
+            labelValue = new Label();
+            labelPeriod = new Label();
             SuspendLayout();
             // 
             // listBoxItems
             // 
             listBoxItems.AccessibleName = "listBoxItems";
             listBoxItems.FormattingEnabled = true;
-            listBoxItems.Location = new Point(77, 52);
+            listBoxItems.Location = new Point(12, 40);
             listBoxItems.Name = "listBoxItems";
             listBoxItems.Size = new Size(315, 104);
             listBoxItems.TabIndex = 0;
@@ -48,16 +52,16 @@
             // txtNameField
             // 
             txtNameField.AccessibleName = "txtNameField";
-            txtNameField.Location = new Point(77, 177);
+            txtNameField.Location = new Point(15, 199);
             txtNameField.Name = "txtNameField";
-            txtNameField.Size = new Size(125, 27);
+            txtNameField.Size = new Size(152, 27);
             txtNameField.TabIndex = 1;
             txtNameField.TextChanged += txtNameField_TextChanged;
             // 
             // txtCycleValueField
             // 
             txtCycleValueField.AccessibleName = "txtCycleValueField";
-            txtCycleValueField.Location = new Point(75, 220);
+            txtCycleValueField.Location = new Point(15, 254);
             txtCycleValueField.Name = "txtCycleValueField";
             txtCycleValueField.Size = new Size(127, 27);
             txtCycleValueField.TabIndex = 2;
@@ -67,7 +71,7 @@
             // 
             cbPeriodTypeField.AccessibleName = "cbPeriodTypeField";
             cbPeriodTypeField.FormattingEnabled = true;
-            cbPeriodTypeField.Location = new Point(80, 275);
+            cbPeriodTypeField.Location = new Point(230, 253);
             cbPeriodTypeField.Name = "cbPeriodTypeField";
             cbPeriodTypeField.Size = new Size(181, 28);
             cbPeriodTypeField.TabIndex = 3;
@@ -76,19 +80,63 @@
             // btnSaveConsumable
             // 
             btnSaveConsumable.AccessibleName = "btnSaveConsumable";
-            btnSaveConsumable.Location = new Point(79, 326);
+            btnSaveConsumable.Location = new Point(153, 392);
             btnSaveConsumable.Name = "btnSaveConsumable";
-            btnSaveConsumable.Size = new Size(94, 29);
+            btnSaveConsumable.Size = new Size(111, 46);
             btnSaveConsumable.TabIndex = 4;
-            btnSaveConsumable.Text = "button1";
+            btnSaveConsumable.Text = "Добавить";
             btnSaveConsumable.UseVisualStyleBackColor = true;
             btnSaveConsumable.Click += btnSaveConsumable_Click;
+            // 
+            // labelList
+            // 
+            labelList.AccessibleName = "labelList";
+            labelList.AutoSize = true;
+            labelList.Location = new Point(14, 17);
+            labelList.Name = "labelList";
+            labelList.Size = new Size(153, 20);
+            labelList.TabIndex = 5;
+            labelList.Text = "Список расходников";
+            // 
+            // labelName
+            // 
+            labelName.AccessibleName = "labelName";
+            labelName.AutoSize = true;
+            labelName.Location = new Point(15, 176);
+            labelName.Name = "labelName";
+            labelName.Size = new Size(162, 20);
+            labelName.TabIndex = 6;
+            labelName.Text = "Название расходника";
+            // 
+            // labelValue
+            // 
+            labelValue.AccessibleName = "labelValue";
+            labelValue.AutoSize = true;
+            labelValue.Location = new Point(15, 229);
+            labelValue.Name = "labelValue";
+            labelValue.Size = new Size(87, 20);
+            labelValue.TabIndex = 7;
+            labelValue.Text = "Ввод числа";
+            // 
+            // labelPeriod
+            // 
+            labelPeriod.AccessibleName = "labelPeriod";
+            labelPeriod.AutoSize = true;
+            labelPeriod.Location = new Point(230, 215);
+            labelPeriod.Name = "labelPeriod";
+            labelPeriod.Size = new Size(120, 20);
+            labelPeriod.TabIndex = 8;
+            labelPeriod.Text = "Выбор периода";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(423, 450);
+            Controls.Add(labelPeriod);
+            Controls.Add(labelValue);
+            Controls.Add(labelName);
+            Controls.Add(labelList);
             Controls.Add(btnSaveConsumable);
             Controls.Add(cbPeriodTypeField);
             Controls.Add(txtCycleValueField);
@@ -108,5 +156,9 @@
         private TextBox txtCycleValueField;
         private ComboBox cbPeriodTypeField;
         private Button btnSaveConsumable;
+        private Label labelList;
+        private Label labelName;
+        private Label labelValue;
+        private Label labelPeriod;
     }
 }

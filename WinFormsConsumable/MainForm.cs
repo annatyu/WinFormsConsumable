@@ -14,7 +14,14 @@ namespace WinFormsConsumable
 
         private void btnSaveConsumable_Click(object sender, EventArgs e)
         {
+            // Вызываем ваш метод проверки из ЛР №3
+            ConsumableValidator validator = new ConsumableValidator();
 
+            if (validator.CheckConsumableData(txtNameField.Text, txtCycleValueField.Text, cbPeriodTypeField.Text))
+            {
+                // Если данные валидны, добавляем строку в список
+                listBoxItems.Items.Add($"{txtNameField.Text} — {txtCycleValueField.Text} {cbPeriodTypeField.Text}");
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
