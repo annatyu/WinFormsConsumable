@@ -3,6 +3,7 @@ using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.UIA3;
 using System.IO;
+using System;
 
 namespace WinFormsConsumable.UiTests
 {
@@ -31,33 +32,78 @@ namespace WinFormsConsumable.UiTests
         public void TestTeardown()
         {
             // Закрываем автоматизацию и приложение после теста
-            _automation.Dispose();
-            _app.Close();
+            _automation?.Dispose();
+            _app?.Close();
         }
 
+        // ТЕСТ 1: Успешное добавление расходника (Вариант "мес.")
         [Test]
         public void System_AddConsumable_SuccessfullyDisplaysInList()
         {
-            // 1. Находим элементы на форме по их AutomationId (или по типу)
             var txtName = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtNameField")).AsTextBox();
             var txtCycle = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtCycleValueField")).AsTextBox();
             var cbPeriod = _window.FindFirstDescendant(cf => cf.ByAutomationId("cbPeriodTypeField")).AsComboBox();
             var btnSave = _window.FindFirstDescendant(cf => cf.ByAutomationId("btnSaveConsumable")).AsButton();
             var listBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("listBoxItems")).AsListBox();
 
-            // 2. Имитируем ввод данных реальным пользователем
             txtName.Text = "Зубная щетка";
             txtCycle.Text = "3";
-            //cbPeriod.Select("мес."); // Выбираем первый элемент в выпадающем списке (например, "мес.")
-            // Принудительно вписываем текст в ComboBox, имитируя выбор пользователя
             cbPeriod.EditableText = "мес.";
-            // 3. Робот нажимает на кнопку "Добавить"
+
             btnSave.Click();
             System.Threading.Thread.Sleep(300);
-            // 4. Проверяем результат (системное ожидание)
-            // Ищем, появился ли в ListBox добавленный элемент
+
             Assert.That(listBox.Items, Has.Length.GreaterThan(0), "Список расходников пуст!");
             Assert.That(listBox.Items[0].Text, Does.Contain("Зубная щетка"), "Расходник не добавился в интерфейс.");
+        }
+
+        // ТЕСТ 2: Альтернативный сценарий добавления (Вариант "нед.")
+        [Test]
+        public void System_AddConsumable_WithWeeksPeriod_SuccessfullyDisplaysInList()
+        {
+            var txtName = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtNameField")).AsTextBox();
+            var txtCycle = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtCycleValueField")).AsTextBox();
+            var cbPeriod = _window.FindFirstDescendant(cf => cf.ByAutomationId("cbPeriodTypeField")).AsComboBox();
+            var btnSave = _window.FindFirstDescendant(cf => cf.ByAutomationId("btnSaveConsumable")).AsButton();
+            var listBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("listBoxItems")).AsListBox();
+
+            txtName.Text = "Фильтр для воды";
+            txtCycle.Text = "2";
+            cbPeriod.EditableText = "нед."; // Проверяем другую ветку логики и данных
+
+            btnSave.Click();
+            System.Threading.Thread.Sleep(300);
+
+            Assert.That(listBox.Items, Has.Length.GreaterThan(0), "Список расходников пуст!");
+            Assert.That(listBox.Items[0].Text, Does.Contain("Фильтр для воды"), "Второй расходник не отобразился.");
+        }
+
+        // ТЕСТ 3: Негативный сценарий. Проверка вызова окна ошибки при пустом периоде
+        [Test]
+        public void System_AddConsumable_EmptyPeriod_ShowsValidationErrorWindow()
+        {
+            var txtName = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtNameField")).AsTextBox();
+            var txtCycle = _window.FindFirstDescendant(cf => cf.ByAutomationId("txtCycleValueField")).AsTextBox();
+            var cbPeriod = _window.FindFirstDescendant(cf => cf.ByAutomationId("cbPeriodTypeField")).AsComboBox();
+            var btnSave = _window.FindFirstDescendant(cf => cf.ByAutomationId("btnSaveConsumable")).AsButton();
+
+            txtName.Text = "Линзы контактные";
+            txtCycle.Text = "1";
+            cbPeriod.EditableText = ""; // Намеренно оставляем тип периода пустым!
+
+            btnSave.Click();
+            System.Threading.Thread.Sleep(500); // Даем время на появление модального окна
+
+            // Ищем модальное окно ошибки (MessageBox), которое перекрывает главное окно
+            var modalWindows = _window.ModalWindows;
+
+            // Проверяем, что окно предупреждения физически появилось
+            Assert.That(modalWindows, Has.Length.GreaterThan(0), "Диалоговое окно валидации не появилось!");
+            // Извлекаем первое открывшееся диалоговое окно
+            var messageBox = modalWindows[0];
+            // Автоматически закрываем окно MessageBox (нажимаем кнопку ОК), чтобы тест не завис
+            var btnOk = modalWindows[0].FindFirstDescendant(cf => cf.ByText("OK")).AsButton();
+            btnOk?.Click();
         }
     }
 }
